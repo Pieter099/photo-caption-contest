@@ -1,6 +1,6 @@
 {
   "development": {
-    "username": "postgres",
+    "username": "pieterlourens",
     "password": null,
     "database": "photo_caption_contest_db",
     "host": "127.0.0.1",
