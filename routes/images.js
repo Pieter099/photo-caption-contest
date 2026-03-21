@@ -31,4 +31,20 @@ router.get("/:id", async (req, res) => {
     }
 });
 
+router.post("/:id/captions", authMiddleware, async (req, res) => {
+    try {
+        const { text } = req.body;
+
+        const caption = await Caption.create({
+            text,
+            userId: req.user.id,
+            imageId: req.params.id
+        });
+
+        res.status(201).json(caption);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
 module.exports = router;
