@@ -23,3 +23,11 @@ module.exports = (sequelize, DataTypes) => {
   });
   return Caption;
 };
+
+Caption.associate = function(models) {
+  Caption.belongsTo(models.User, { 
+    foreignKey: 'userId' });
+    
+  Caption.belongsTo(models.Image, { 
+    foreignKey: 'imageId' });
+};

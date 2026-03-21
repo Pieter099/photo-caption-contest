@@ -22,3 +22,8 @@ module.exports = (sequelize, DataTypes) => {
   });
   return Image;
 };
+
+Image.associate = function(models) {
+  Image.hasMany(models.Caption, { 
+    foreignKey: 'imageId' });
+};
