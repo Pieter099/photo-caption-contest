@@ -1,21 +1,35 @@
 const jwt = require('jsonwebtoken');
 
+const SECRET = "yourSecretKey"; // ⚠️ MUST match login
+
 const authMiddleware = (req, res, next) => {
-  const header = req.headers.authorization;
-
-  if (!header) {
-    return res.status(401).json({ message: 'No token provided' });
-  }
-
-  const token = header.split(' ')[1]; 
-
   try {
-    const decoded = jwt.verify(token, superSecretKey);
-    req.user = decoded; 
+    const authHeader = req.headers.authorization;
+
+    // 🔴 No header
+    if (!authHeader) {
+      return res.status(401).json({ error: "No token provided" });
+    }
+
+    // 🔥 Remove "Bearer "
+    const token = authHeader.split(" ")[1];
+
+    // 🔴 No token after split
+    if (!token) {
+      return res.status(401).json({ error: "Token missing" });
+    }
+
+    // 🔥 Verify token
+    const decoded = jwt.verify(token, SECRET);
+
+    // 🔥 Attach user
+    req.user = decoded;
+
     next();
+
   } catch (error) {
-    return res.status(401).json({ message: 'Invalid token' });
+    return res.status(401).json({ error: "Invalid token" });
   }
-}
+};
 
 module.exports = authMiddleware;
