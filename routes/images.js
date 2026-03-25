@@ -17,7 +17,6 @@ router.get('/', async (req, res) => {
 
     const images = await Image.findAll();
 
-    cache.set('allImages');
     cache.set('allImages', images);
 
     console.log("Serving from database");
@@ -51,7 +50,7 @@ router.get("/:id", async (req, res) => {
     const cacheKey = `image_${req.params.id}`;
     const cachedImage = cache.get(cacheKey);
 
-    if (cachedImage) {
+    if (cachedImage !== undefined) {
       console.log("Serving single image from cache");
       return res.json(cachedImage);
     }
@@ -68,12 +67,13 @@ router.get("/:id", async (req, res) => {
     if (!image) {
       return res.status(404).json({ error: 'Image not found' });
     }
+    const plainImage = image.toJSON();
 
-    cache.set(cacheKey, image);
+    cache.set(cacheKey, plainImage);
 
     console.log("Serving single image from database");
 
-    res.json(image);
+    res.json(plainImage);
 
   } catch (error) {
     res.status(500).json({ error: 'Failed to fetch image' });
@@ -113,3 +113,4 @@ router.post("/:id/captions", authMiddleware, async (req, res) => {
 });
 
 module.exports = router;
+
