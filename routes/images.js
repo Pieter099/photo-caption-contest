@@ -1,25 +1,30 @@
-const nodeCache = require('node-cache');
-const cache = new nodeCache({ stdTTL: 60 }); // Cache for 60 seconds
+const NodeCache = require('node-cache');
+const cache = new NodeCache({ stdTTL: 60 }); // Cache for 60 seconds
+
 const express = require('express');
 const router = express.Router();
+
 const { Image, Caption, User } = require('../models');
 const authMiddleware = require('../middleware/auth');
 
-// GET all images
+
+// ==============================
+// GET ALL IMAGES
+// ==============================
 router.get('/', async (req, res) => {
   try {
     const cachedImages = cache.get('allImages');
 
-    if (cachedImages) {
-      console.log("Serving from cache");
+    if (cachedImages !== undefined) {
+      console.log("⚡ Serving all images from cache");
       return res.json(cachedImages);
     }
+
+    console.log("📦 Serving all images from database");
 
     const images = await Image.findAll();
 
     cache.set('allImages', images);
-
-    console.log("Serving from database");
 
     res.json(images);
 
@@ -28,32 +33,45 @@ router.get('/', async (req, res) => {
   }
 });
 
-// POST new image
+
+// ==============================
+// POST NEW IMAGE
+// ==============================
 router.post('/', async (req, res) => {
-    try {
-        const { title, url } = req.body;
+  try {
+    const { title, url } = req.body;
 
-        if (!title || !url) {
-            return res.status(400).json({ error: "Title and URL are required" });
-        }
-
-        const newImage = await Image.create({ title, url });
-        res.status(201).json(newImage);
-    } catch (error) {
-        res.status(500).json({ error: 'Failed to create image' });
+    if (!title || !url) {
+      return res.status(400).json({ error: "Title and URL are required" });
     }
+
+    const newImage = await Image.create({ title, url });
+
+    // 🔥 Invalidate cache
+    cache.del('allImages');
+
+    res.status(201).json(newImage);
+
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to create image' });
+  }
 });
 
-// GET single image + captions
+
+// ==============================
+// GET SINGLE IMAGE + CAPTIONS
+// ==============================
 router.get("/:id", async (req, res) => {
   try {
     const cacheKey = `image_${req.params.id}`;
     const cachedImage = cache.get(cacheKey);
 
     if (cachedImage !== undefined) {
-      console.log("Serving single image from cache");
+      console.log("⚡ Serving single image from cache");
       return res.json(cachedImage);
     }
+
+    console.log("📦 Serving single image from database");
 
     const image = await Image.findByPk(req.params.id, {
       include: [
@@ -67,11 +85,10 @@ router.get("/:id", async (req, res) => {
     if (!image) {
       return res.status(404).json({ error: 'Image not found' });
     }
+
     const plainImage = image.toJSON();
 
     cache.set(cacheKey, plainImage);
-
-    console.log("Serving single image from database");
 
     res.json(plainImage);
 
@@ -80,17 +97,20 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-// POST caption (protected)
+
+// ==============================
+// POST CAPTION (PROTECTED)
+// ==============================
 router.post("/:id/captions", authMiddleware, async (req, res) => {
   try {
     const { text } = req.body;
 
-    // 🔥 Validate text
+    // Validate input
     if (!text) {
       return res.status(400).json({ error: "Caption text is required" });
     }
 
-    // 🔥 Check if image exists
+    // Check if image exists
     const image = await Image.findByPk(req.params.id);
     if (!image) {
       return res.status(404).json({ error: "Image not found" });
@@ -98,12 +118,13 @@ router.post("/:id/captions", authMiddleware, async (req, res) => {
 
     const caption = await Caption.create({
       text,
-      userId: req.user.userId, // ✅ FIXED
+      userId: req.user.userId,
       imageId: req.params.id
     });
 
-    cache.del('allImages'); // Invalidate all images cache
-    cache.del(`image_${req.params.id}`); // Invalidate image cache
+    // 🔥 Invalidate cache
+    cache.del('allImages');
+    cache.del(`image_${req.params.id}`);
 
     res.status(201).json(caption);
 
@@ -112,5 +133,8 @@ router.post("/:id/captions", authMiddleware, async (req, res) => {
   }
 });
 
-module.exports = router;
 
+// ==============================
+// EXPORT ROUTER
+// ==============================
+module.exports = router;
