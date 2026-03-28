@@ -6,11 +6,29 @@ const router = express.Router();
 
 const { Image, Caption, User } = require('../models');
 const authMiddleware = require('../middleware/auth');
+const swaggerJSDoc = require('swagger-jsdoc');
 
 
 // ==============================
 // GET ALL IMAGES
 // ==============================
+/** @swagger
+ * /Images:
+ *   get:
+ *     summary: Get all images
+ *     description: Retrieve a list of all images in the system.
+ *     responses:
+ *       200:
+ *         description: A list of images
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Image'
+ *       500:
+ *         description: Server error
+ */
 router.get('/', async (req, res) => {
   try {
     const cachedImages = cache.get('allImages');
@@ -61,6 +79,29 @@ router.post('/', async (req, res) => {
 // ==============================
 // GET SINGLE IMAGE + CAPTIONS
 // ==============================
+/** @swagger
+ * /Images/{id}:
+ *   get:
+ *     summary: Get a single image
+ *     description: Retrieve details of a specific image and its captions.
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: A single image with captions
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Image'
+ *       404:
+ *         description: Image not found
+ *       500:
+ *         description: Server error
+ */
 router.get("/:id", async (req, res) => {
   try {
     const cacheKey = `image_${req.params.id}`;
@@ -101,6 +142,37 @@ router.get("/:id", async (req, res) => {
 // ==============================
 // POST CAPTION (PROTECTED)
 // ==============================
+/** @swagger
+ * /Images/{id}/captions:
+ *   post:
+ *     summary: Post a new caption for an image
+ *     description: Submit a new caption for a specific image.
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Caption'
+ *     responses:
+ *       201:
+ *         description: Caption created successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Caption'
+ *       400:
+ *         description: Bad request
+ *       404:
+ *         description: Image not found
+ *       500:
+ *         description: Server error
+ */
 router.post("/:id/captions", authMiddleware, async (req, res) => {
   try {
     const { text } = req.body;

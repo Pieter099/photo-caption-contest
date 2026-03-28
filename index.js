@@ -17,11 +17,12 @@ app.use('/register', registerRoutes);
 app.use('/login', loginRoutes);
 app.use('/images', imagesRoute);
 
-app.listen(port, () => {
-  console.log(`Server is running on http://localhost:${port}`);
-});
-
 // ==============================
 // Swagger API Documentation
 // ==============================
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
+app.listen(port, () => {
+  console.log(`Server is running on http://localhost:${port}`);
+});
+
