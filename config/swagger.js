@@ -22,11 +22,6 @@ const options = {
             bearerFormat: 'JWT'
           }
         },
-        security: [
-          {
-            bearerAuth: []
-          }
-        ]
       }
   },
   apis: ['./routes/*.js'] // Path to the API routes

@@ -172,6 +172,8 @@ router.get("/:id", async (req, res) => {
  *         description: Image not found
  *       500:
  *         description: Server error
+ *   security:
+ *     - bearerAuth: []
  */
 router.post("/:id/captions", authMiddleware, async (req, res) => {
   try {
