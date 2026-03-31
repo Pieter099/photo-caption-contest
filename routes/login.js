@@ -8,6 +8,7 @@ const jwt = require('jsonwebtoken');
 // ==============================
 // POST LOGIN
 // ==============================
+
 /** @swagger
  * /login:
  *   post:
@@ -23,10 +24,10 @@ const jwt = require('jsonwebtoken');
  *               email:
  *                 type: string
  *                 example: "user@example.com"
- *              password:
+ *               password:
  *                 type: string
  *                 example: "password123"
-    *     responses:
+ *       responses:
  *       200:
  *         description: Successful login
  *         content:
