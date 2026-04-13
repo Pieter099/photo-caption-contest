@@ -12,8 +12,9 @@ const swaggerJSDoc = require('swagger-jsdoc');
 // ==============================
 // GET ALL IMAGES
 // ==============================
-/** @swagger
- * /Images:
+/**
+ * @swagger
+ * /images:
  *   get:
  *     summary: Get all images
  *     description: Retrieve a list of all images in the system.
@@ -25,7 +26,17 @@ const swaggerJSDoc = require('swagger-jsdoc');
  *             schema:
  *               type: array
  *               items:
- *                 $ref: '#/components/schemas/Image'
+ *                 type: object
+ *                 properties:
+ *                   id:
+ *                     type: integer
+ *                     example: 1
+ *                   title:
+ *                     type: string
+ *                     example: "Funny dog"
+ *                   url:
+ *                     type: string
+ *                     example: "https://example.com/dog.jpg"
  *       500:
  *         description: Server error
  */
@@ -55,6 +66,39 @@ router.get('/', async (req, res) => {
 // ==============================
 // POST NEW IMAGE
 // ==============================
+/** @swagger
+ * /Images:
+ *   post:
+ *     summary: POST a new image
+ *     description: Add a new image to the system.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - title
+ *               - url
+ *             properties:
+ *               title:
+ *                 type: string
+ *                 example: "Sunset at the beach"
+ *               url:
+ *                 type: string
+ *                 example: "https://example.com/sunset.jpg"
+ *     responses:
+ *       201:
+ *         description: Image created successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Image'
+ *       400:
+ *         description: Bad request
+ *       500:
+ *         description: Server error
+ */
 router.post('/', async (req, res) => {
   try {
     const { title, url } = req.body;
