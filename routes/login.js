@@ -9,7 +9,8 @@ const jwt = require('jsonwebtoken');
 // POST LOGIN
 // ==============================
 
-/** @swagger
+/**
+ * @swagger
  * /login:
  *   post:
  *     summary: User login
@@ -20,14 +21,17 @@ const jwt = require('jsonwebtoken');
  *         application/json:
  *           schema:
  *             type: object
+ *             required:
+ *               - email
+ *               - password
  *             properties:
  *               email:
  *                 type: string
- *                 example: "user@example.com"
+ *                 example: "jack@example.com"
  *               password:
  *                 type: string
- *                 example: "password123"
- *       responses:
+ *                 example: "j123m456"
+ *     responses:
  *       200:
  *         description: Successful login
  *         content:
@@ -37,7 +41,7 @@ const jwt = require('jsonwebtoken');
  *               properties:
  *                 token:
  *                   type: string
- *                   example: "your_jwt_token"
+ *                   example: "eyJhbGciOiJIUzI1NiIs..."
  *       404:
  *         description: User not found
  *       401:
