@@ -119,7 +119,6 @@ router.post('/', async (req, res) => {
   }
 });
 
-
 // ==============================
 // GET SINGLE IMAGE + CAPTIONS
 // ==============================
@@ -182,12 +181,12 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-
 // ==============================
 // POST CAPTION (PROTECTED)
 // ==============================
-/** @swagger
- * /Images/{id}/captions:
+/**
+ * @swagger
+ * /images/{id}/captions:
  *   post:
  *     summary: Post a new caption for an image
  *     description: Submit a new caption for a specific image.
@@ -196,28 +195,28 @@ router.get("/:id", async (req, res) => {
  *         name: id
  *         required: true
  *         schema:
- *           type: string
+ *           type: integer
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/Caption'
+ *             type: object
+ *             properties:
+ *               text:
+ *                 type: string
+ *                 example: "This is hilarious 😂"
  *     responses:
  *       201:
  *         description: Caption created successfully
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Caption'
  *       400:
  *         description: Bad request
  *       404:
  *         description: Image not found
  *       500:
  *         description: Server error
- *   security:
- *     - bearerAuth: []
+ *     security:
+ *       - bearerAuth: []
  */
 router.post("/:id/captions", authMiddleware, async (req, res) => {
   try {
