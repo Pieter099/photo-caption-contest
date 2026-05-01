@@ -12,7 +12,9 @@
   <!-- LOGIN -->
   <section id="login-section">
     <h2>Login</h2>
+    <label for="email">Email:</label>
     <input type="email" id="email" placeholder="Email">
+    <label for="password">Password:</label>
     <input type="password" id="password" placeholder="Password">
     <button onclick="login()">Login</button>
     <p id="login-status"></p>
@@ -30,12 +32,12 @@
     <img id="detail-img" />
     <h3 id="detail-title"></h3>
 
-    <h4>Captions:</h4>
-    <ul id="captions-list"></ul>
+    <h4 style="margin-bottom: 7px;">Captions:</h4>
+    <ul id="captions-list" style="margin-top: 0;"></ul>
 
-    <h4>Add Caption</h4>
-    <input type="text" id="caption-input" placeholder="Write caption...">
-    <button onclick="addCaption()">Submit Caption</button>
+    <h4 style="margin-top: 10px; margin-bottom: 5px;">Add Caption</h4>
+    <input type="text" id="caption-input" placeholder="Enter caption..." style="margin-top: 0;">
+    <button onclick="addCaption()">Submit</button>
   </section>
 
   <script src="script.js"></script>
