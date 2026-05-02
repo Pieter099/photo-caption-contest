@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 
-const SECRET = "yourSecretKey"; // ⚠️ MUST match login
+const SECRET = process.env.JWT_SECRET
 
 const authMiddleware = (req, res, next) => {
   try {
