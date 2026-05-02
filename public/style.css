@@ -1,73 +1,55 @@
+/* ===== GLOBAL ===== */
 body {
   font-family: Arial, sans-serif;
   padding: 20px;
-  background: #f4f4f4;
+  margin: 0;
+  background: linear-gradient(to right, #eef2f3, #dfe9f3);
 }
 
 h1 {
   text-align: center;
 }
 
+/* ===== LOGIN (CENTERED ALWAYS) ===== */
 #login-section {
   max-width: 350px;
-  margin: 0 auto;
+  margin: 20px auto;
   background: white;
   padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
 }
 
-#login-section label, #login-section input {
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 5px;
-  margin-left: 50px;
+#login-section label {
+  display: block;
+  margin-top: 10px;
+  font-weight: bold;
 }
 
 #login-section input {
-  padding: 5px 40px 5px 5px;
+  width: 100%;
+  padding: 8px;
+  margin-top: 5px;
   border: 1px solid #ccc;
   border-radius: 4px;
 }
 
-#login-section label {
-  margin-top: 12px;
-  font-weight: bold;
-}
-
 #login-section button {
-  display: flex;
-  padding: 10px 12px;
-  margin: 20px auto 0 auto;
+  display: block;
+  margin: 15px auto 0;
+  padding: 10px 15px;
   background: #007BFF;
   color: white;
   border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-#images-container {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-}
-
-.image-card {
-  background: white;
-  padding: 10px;
-  border-radius: 8px;
-  cursor: pointer;
-  width: 200px;
-}
-
-.image-card img {
-  width: 100%;
   border-radius: 6px;
+  cursor: pointer;
 }
 
-#image-detail img {
-  width: 300px;
-  margin-top: 10px;
+/* ===== GALLERY ===== */
+#images-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 15px;
 }
 
 .image-card {
@@ -75,8 +57,12 @@ h1 {
   padding: 10px;
   border-radius: 12px;
   cursor: pointer;
-  width: 200px;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.image-card img {
+  width: 100%;
+  border-radius: 8px;
 }
 
 .image-card:hover {
@@ -84,16 +70,7 @@ h1 {
   box-shadow: 0 8px 20px rgba(0,0,0,0.1);
 }
 
-body {
-  background: linear-gradient(to right, #eef2f3, #dfe9f3);
-}
-
-#images-container {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 15px;
-}
-
+/* ===== IMAGE DETAIL (CENTERED ALWAYS) ===== */
 #image-detail {
   background: white;
   padding: 20px;
@@ -113,10 +90,42 @@ body {
   box-shadow: 0 8px 20px rgba(0,0,0,0.15);
 }
 
-#image-detail #caption-input {
-  padding: 5px 80px 5px 5px;
-  margin-top: 5px;
+#caption-input {
+  width: 70%;
+  padding: 8px;
   margin-right: 10px;
   border: 1px solid #ccc;
   border-radius: 4px;
+}
+
+/* ===== 📱 RESPONSIVE BREAKPOINTS ===== */
+
+/* Tablets */
+@media (max-width: 768px) {
+  #images-container {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* Phones */
+@media (max-width: 480px) {
+  body {
+    padding: 10px;
+  }
+
+  #images-container {
+    grid-template-columns: repeat(2, 1fr); /* 👈 YOUR GOAL */
+  }
+
+  #login-section,
+  #image-detail {
+    max-width: 100%;
+    margin: 15px auto;
+    padding: 15px;
+  }
+
+  #caption-input {
+    width: 100%;
+    margin-bottom: 10px;
+  }
 }
