@@ -10,6 +10,7 @@ const imagesRoute = require('./routes/images');
 const swaggerUi = require('swagger-ui-express');
 const swaggerSpec = require('./config/swagger');
 
+app.use(express.static('public'));
 app.use(cors());
 app.use(express.json());
 
@@ -21,6 +22,10 @@ app.use('/images', imagesRoute);
 // Swagger API Documentation
 // ==============================
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
+app.get('/', (req, res) => {
+  res.sendFile(__dirname + '/public/index.html');
+});
 
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
