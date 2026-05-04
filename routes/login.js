@@ -66,11 +66,13 @@ router.post('/', async (req, res) => {
 
     const token = jwt.sign(
         { userId: user.id }, 
-        process.env.JWT_SECRET, 
+        console.log("JWT SECRET:", process.env.JWT_SECRET);, 
         { expiresIn: '1h' }
     );
 
     res.json({ token });
 });
+
+
 
 module.exports = router;
