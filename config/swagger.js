@@ -10,7 +10,7 @@ const options = {
     },
      servers: [
       {
-        url: 'http://localhost:3000',
+        url: "https://photo-caption-contest-api-qfel.onrender.com",
         description: 'Development server'
       }
     ],
